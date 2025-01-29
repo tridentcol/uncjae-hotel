@@ -1,0 +1,154 @@
+/* styles/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+  }
+
+  /* Estilos de scroll suave */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-luxury-gold/20 dark:bg-luxury-gold-light/20 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-luxury-gold/30 dark:bg-luxury-gold-light/30;
+  }
+}
+
+/* Components */
+@layer components {
+  .section-container {
+    @apply relative overflow-hidden;
+    transform-style: preserve-3d;
+  }
+
+  .luxury-button {
+    @apply relative overflow-hidden rounded-lg px-8 py-4
+      border border-luxury-gold/20 dark:border-luxury-gold-light/20
+      bg-transparent hover:bg-luxury-gold/5 dark:hover:bg-luxury-gold-dark/5
+      text-luxury-brown dark:text-luxury-gold-light
+      transition-colors duration-300;
+  }
+
+  .luxury-button::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-[2px]
+      bg-luxury-gold dark:bg-luxury-gold-light
+      transform origin-left scale-x-0 transition-transform duration-500;
+  }
+
+  .luxury-button:hover::after {
+    @apply scale-x-100;
+  }
+
+  .image-container {
+    @apply relative overflow-hidden rounded-2xl;
+    transform-style: preserve-3d;
+  }
+
+  .image-container::before {
+    content: '';
+    @apply absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-500;
+    z-index: 1;
+  }
+
+  .image-container:hover::before {
+    @apply opacity-100;
+  }
+}
+
+/* Utilities */
+@layer utilities {
+  .perspective {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* Animaciones */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(45deg);
+  }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Transiciones */
+.smooth-transition {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+.hover-lift {
+  @apply transition-transform duration-300 ease-out;
+}
+
+.hover-lift:hover {
+  @apply transform -translate-y-1;
+}
+
+/* Efectos de Fondo */
+.bg-gradient-overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.7)
+  );
+}
+
+.section-transition {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--bg-color)
+  );
+}

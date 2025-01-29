@@ -1,0 +1,3100 @@
+CÓDIGO DEL PROYECTO JAELEN HOTEL
+================================================================================
+
+ESTRUCTURA DE CARPETAS
+================================================================================
+
+├── src/
+│   ├── assets/
+│   │   ├── images/
+│   │   │   ├── sections/
+│   │   │   │   ├── places/
+│   │   │   │   │   ├── socorro/
+│   │   │   │   │   │   ├── places-socorro.jpg
+│   │   │   │   │   │   ├── room-bathroom.jpg
+│   │   │   │   │   │   ├── room-bedroom.jpg
+│   │   │   │   │   │   ├── room-living.jpg
+│   │   │   │   │   │   ├── room-main.jpg
+│   │   │   │   │   │   └── room-view.jpg
+│   │   │   │   │   ├── zaragocilla/
+│   │   │   │   │   │   └── places-zaragocilla.jpg
+│   │   │   │   │   └── places-hero.jpg
+│   │   │   │   ├── services/
+│   │   │   │   │   └── services-hero.jpg
+│   │   ├── videos/
+│   │   │   ├── captivating-moments.mp4
+│   │   │   ├── luxurious-accommodations.mp4
+│   │   │   ├── main-video.mp4
+│   │   │   ├── personalized-attention.mp4
+│   │   │   └── premium-services.mp4
+│   │   └── react.svg
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Navigation.jsx
+│   │   │   └── layout.jsx
+│   │   ├── ui/
+│   │   │   ├── AnimatedNavbar.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── HeroSection.jsx
+│   │   │   ├── ImageGallery.jsx
+│   │   │   ├── MainHero.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Section.jsx
+│   │   │   ├── SectionPreview.jsx
+│   │   │   ├── SideNavBar.jsx
+│   │   │   └── ThemeToggle.jsx
+│   │   └── VideoSectionManager.jsx
+│   ├── context/
+│   ├── hooks/
+│   │   └── useTheme.js
+│   ├── pages/
+│   │   ├── Contact.jsx
+│   │   ├── Gallery.jsx
+│   │   ├── MainPage.jsx
+│   │   ├── Places.jsx
+│   │   ├── Services.jsx
+│   │   └── SocorroProject.jsx
+│   ├── styles/
+│   │   └── index.css
+│   ├── utils/
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── .gitignore
+├── README.md
+├── eslint.config.js
+├── extract_code.py
+├── index.html
+├── jaelen_hotel_code_complete.txt
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── python estructura_carpetas.py
+├── tailwind.config.js
+└── vite.config.js
+
+================================================================================
+
+
+================================================================================
+File: App.css
+================================================================================
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+================================================================================
+File: App.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/layout';
+import MainPage from './pages/MainPage';
+import Places from './pages/Places';
+import Gallery from './pages/Gallery';
+import Services from './pages/Services';
+import Contact from './pages/Contact';
+import SocorroProject from './pages/SocorroProject'; // Importamos el nuevo componente
+
+const App = () => {
+  // Initialize theme state from localStorage or system preference
+  const [isDark, setIsDark] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme === 'dark';
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+  
+  const [language, setLanguage] = useState('en');
+
+  // Effect to handle theme changes
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
+
+  const toggleDark = () => {
+    setIsDark(prev => !prev);
+  };
+
+  return (
+    <Router>
+      <Layout 
+        isDark={isDark} 
+        toggleDark={toggleDark}
+        setLanguage={setLanguage}
+      >
+        <Routes>
+          <Route path="/" element={<MainPage isDark={isDark} toggleDark={toggleDark} setLanguage={setLanguage} />} />
+          <Route path="/places" element={<Places isDark={isDark} toggleDark={toggleDark} setLanguage={setLanguage} />} />
+          <Route path="/places/socorro" element={<SocorroProject isDark={isDark} toggleDark={toggleDark} setLanguage={setLanguage} />} />
+          <Route path="/gallery" element={<Gallery isDark={isDark} toggleDark={toggleDark} setLanguage={setLanguage} />} />
+          <Route path="/services" element={<Services isDark={isDark} toggleDark={toggleDark} setLanguage={setLanguage} />} />
+          <Route path="/contact" element={<Contact isDark={isDark} toggleDark={toggleDark} setLanguage={setLanguage} />} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+};
+
+export default App;
+
+================================================================================
+File: index.css
+================================================================================
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+================================================================================
+File: main.jsx
+================================================================================
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './styles/index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+
+================================================================================
+File: components\VideoSectionManager.jsx
+================================================================================
+
+import React, { useRef, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { AnimatedNavbar } from '../components/ui/AnimatedNavbar';
+import { Calendar } from 'lucide-react';
+import Footer from '../components/layout/Footer';
+
+const VideoSectionManager = ({ sections, currentSection, onSectionChange }) => {
+  const sectionRefs = useRef([]);
+  const observerRef = useRef(null);
+  const [activeVideo, setActiveVideo] = useState(0);
+  const [showFooter, setShowFooter] = useState(false);
+  const videoRefs = useRef([]);
+  const scrollingRef = useRef(false);
+  const containerRef = useRef(null);
+  const footerRef = useRef(null);
+
+  useEffect(() => {
+    sectionRefs.current = sectionRefs.current.slice(0, sections.length);
+    videoRefs.current = videoRefs.current.slice(0, sections.length);
+
+    const options = {
+      root: null,
+      rootMargin: '-45% 0px',
+      threshold: 0
+    };
+
+    const handleIntersection = async (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          const index = parseInt(entry.target.dataset.index);
+          setShowFooter(index === sections.length - 1);
+
+          if (videoRefs.current[activeVideo]) {
+            try {
+              await videoRefs.current[activeVideo].pause();
+            } catch (error) {
+              console.log('Error al pausar:', error);
+            }
+          }
+
+          if (videoRefs.current[index]) {
+            try {
+              const playPromise = videoRefs.current[index].play();
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.log('Error al reproducir:', error);
+                });
+              }
+            } catch (error) {
+              console.log('Error al reproducir:', error);
+            }
+          }
+
+          setActiveVideo(index);
+          onSectionChange(index);
+        }
+      }
+    };
+
+    observerRef.current = new IntersectionObserver(handleIntersection, options);
+
+    sectionRefs.current.forEach((ref, index) => {
+      if (ref) {
+        observerRef.current.observe(ref);
+      }
+    });
+
+    if (videoRefs.current[0]) {
+      const playPromise = videoRefs.current[0].play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log('Error al reproducir:', error);
+        });
+      }
+    }
+
+    // Manejador de scroll
+    const handleWheel = (event) => {
+      event.preventDefault();
+      
+      if (scrollingRef.current) return;
+      
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const newIndex = Math.min(Math.max(activeVideo + direction, 0), sections.length - 1);
+      
+      if (newIndex !== activeVideo) {
+        scrollingRef.current = true;
+        const targetSection = sectionRefs.current[newIndex];
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        setTimeout(() => {
+          scrollingRef.current = false;
+        }, 1000);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      if (container) {
+        container.removeEventListener('wheel', handleWheel);
+      }
+      videoRefs.current.forEach(video => {
+        if (video) {
+          video.pause();
+        }
+      });
+    };
+  }, [sections, onSectionChange, activeVideo]);
+
+  return (
+    <>
+      {/* Video Background Container */}
+      <div className="fixed inset-0 w-full h-full z-0">
+        {sections.map((section, index) => (
+          <div
+            key={`video-${index}`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              activeVideo === index ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <video
+              ref={el => videoRefs.current[index] = el}
+              className="object-cover w-full h-full"
+              muted
+              loop
+              playsInline
+              preload="auto"
+              src={section.video}
+            />
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-luxury-brown-dark/50" />
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/50" />
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation Menu (siempre visible) */}
+      <AnimatedNavbar 
+        isDark={true}
+        toggleDark={sections[0].toggleDark}
+        setLanguage={sections[0].setLanguage}
+      />
+
+      {/* Booking Button (siempre visible) */}
+      <div className="fixed top-24 right-8 z-50">
+        <div className="group relative">
+          <button className="
+            bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20
+            backdrop-blur-sm
+            text-luxury-cream-light hover:text-luxury-gold-light
+            p-6 rounded-full shadow-lg
+            transition-all duration-300
+            group-hover:scale-105
+          ">
+            <Calendar className="w-8 h-8" />
+          </button>
+          <div className="absolute right-0 mt-4 w-80 opacity-0 scale-95 transform 
+            transition-all duration-300 invisible 
+            group-hover:visible group-hover:opacity-100 group-hover:scale-100">
+            <div className="bg-white dark:bg-luxury-brown rounded-lg shadow-xl p-6">
+              <h3 className="text-xl text-luxury-brown dark:text-luxury-cream-light font-medium mb-4">
+                Make a Reservation
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium 
+                    text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Check-in Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium 
+                    text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Check-out Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <button className="w-full py-3 px-4 rounded-lg
+                  bg-luxury-gold hover:bg-luxury-gold-dark
+                  text-white text-lg font-light
+                  transition-colors">
+                  Book Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Contenedor principal con scroll controlado */}
+      <div 
+        ref={containerRef}
+        className="relative z-10 h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory"
+      >
+        {sections.map((section, index) => (
+          <div
+            key={`section-${index}`}
+            ref={el => sectionRefs.current[index] = el}
+            data-index={index}
+            className="h-screen snap-start snap-always"
+          >
+            <div className="h-screen flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="max-w-4xl mx-auto px-6 text-center"
+              >
+                <h2 className="text-4xl md:text-5xl font-light mb-6 text-luxury-cream-light">
+                  {section.title}
+                </h2>
+                <p className="text-xl md:text-2xl text-luxury-cream">
+                  {section.description}
+                </p>
+                {index !== 0 && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-8 px-8 py-3 rounded-lg
+                      bg-luxury-cream/10 backdrop-blur-sm
+                      border border-luxury-cream/20
+                      text-luxury-cream
+                      transition-all duration-300
+                      hover:bg-luxury-cream/20 hover:border-luxury-gold-light
+                      hover:text-luxury-gold-light"
+                    onClick={() => window.location.href = section.href}
+                  >
+                    Discover More
+                  </motion.button>
+                )}
+              </motion.div>
+            </div>
+          </div>
+        ))}
+
+        {/* Footer Section */}
+        <div ref={footerRef} className="h-screen snap-start snap-always">
+          <Footer />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default VideoSectionManager;
+
+================================================================================
+File: components\layout\Footer.jsx
+================================================================================
+
+import React from 'react';
+import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+
+const Footer = () => {
+  const socialLinks = [
+    { icon: Facebook, href: '#' },
+    { icon: Twitter, href: '#' },
+    { icon: Instagram, href: '#' },
+    { icon: Linkedin, href: '#' }
+  ];
+
+  const footerLinks = [
+    {
+      title: 'Company',
+      links: [
+        { name: 'About Us', href: '#' },
+        { name: 'Careers', href: '#' },
+        { name: 'Press', href: '#' },
+        { name: 'Blog', href: '#' }
+      ]
+    },
+    {
+      title: 'Services',
+      links: [
+        { name: 'Rooms', href: '#' },
+        { name: 'Dining', href: '#' },
+        { name: 'Spa', href: '#' },
+        { name: 'Events', href: '#' }
+      ]
+    },
+    {
+      title: 'Support',
+      links: [
+        { name: 'Contact', href: '#' },
+        { name: 'FAQs', href: '#' },
+        { name: 'Terms', href: '#' },
+        { name: 'Privacy', href: '#' }
+      ]
+    }
+  ];
+
+  return (
+    <footer className="bg-luxury-brown dark:bg-luxury-brown-dark">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          <div className="lg:col-span-2">
+            <h2 className="text-2xl font-bold text-luxury-cream-light">Jaelen Hotel</h2>
+            <p className="mt-4 text-luxury-cream-dark">
+              Luxury and comfort in the heart of the city. Experience the perfect blend of elegance and modern amenities.
+            </p>
+            <div className="mt-6 flex space-x-4">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.href}
+                  className="text-luxury-cream-dark hover:text-luxury-gold-light transition-colors duration-300"
+                >
+                  <social.icon className="h-6 w-6" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {footerLinks.map((section) => (
+            <div key={section.title}>
+              <h3 className="text-sm font-medium uppercase tracking-wider text-luxury-gold-light">
+                {section.title}
+              </h3>
+              <ul className="mt-4 space-y-2">
+                {section.links.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className="text-luxury-cream-dark hover:text-luxury-gold-light transition-colors duration-300"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-luxury-gold/10">
+          <p className="text-center text-luxury-cream-dark">
+            © {new Date().getFullYear()} Jaelen Hotel. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+
+================================================================================
+File: components\layout\layout.jsx
+================================================================================
+
+import React from 'react';
+import Footer from './Footer';
+
+const Layout = ({ children, isDark, toggleDark, setLanguage }) => {
+  return (
+    <div className={isDark ? 'dark' : ''}>
+      <div className="min-h-screen bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+        <main>
+          {React.Children.map(children, child => {
+            if (React.isValidElement(child)) {
+              return React.cloneElement(child, { isDark, toggleDark, setLanguage });
+            }
+            return child;
+          })}
+        </main>
+        <Footer isDark={isDark} />
+      </div>
+    </div>
+  );
+};
+
+export default Layout;
+
+================================================================================
+File: components\layout\Navigation.jsx
+================================================================================
+
+// src/components/layout/Navigation.jsx
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Sun, Moon, Globe } from 'lucide-react';
+
+const Navigation = ({ isDark, toggleDark, setLanguage }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' }
+  ];
+
+  const menuItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Our Places', href: '/places' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Additional Services', href: '/services' },
+    { name: 'Contact Us', href: '/contact' }
+  ];
+
+  const handleNavigation = (href) => {
+    setIsOpen(false);
+    navigate(href);
+  };
+
+  return (
+    <nav className="fixed w-full top-0 z-[100] bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="text-2xl font-bold text-blue-600">
+              Jaelen Hotel
+            </Link>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
+              {menuItems.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`px-3 py-2 rounded-md text-sm font-medium relative group cursor-pointer
+                    ${location.pathname === item.href 
+                      ? 'text-blue-600 dark:text-blue-400' 
+                      : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'
+                    }`}
+                >
+                  {item.name}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Right Menu (Language & Theme) */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <Globe className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              </button>
+              
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-[110]">
+                  <div className="py-1">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setLangMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleDark}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              {isDark ? (
+                <Sun className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              ) : (
+                <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              )}
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden absolute w-full bg-white dark:bg-gray-900 z-[100] shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {menuItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => handleNavigation(item.href)}
+                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium 
+                  ${location.pathname === item.href 
+                    ? 'text-blue-600 dark:text-blue-400 bg-gray-50 dark:bg-gray-800' 
+                    : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+              >
+                {item.name}
+              </button>
+            ))}
+            
+            {/* Mobile Language Selector */}
+            <div className="px-3 py-2">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Language</span>
+              <div className="mt-2 space-y-1">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code);
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Navigation;
+
+================================================================================
+File: components\ui\AnimatedNavbar.jsx
+================================================================================
+
+// AnimatedNavbar.jsx
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Calendar, Globe, Sun, Moon } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+export const AnimatedNavbar = ({ isDark, toggleDark, setLanguage }) => {
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' }
+  ];
+
+  const menuItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Our Places', href: '/places' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Additional Services', href: '/services' },
+    { name: 'Contact Us', href: '/contact' }
+  ];
+
+  return (
+    <motion.nav
+      initial={false}
+      animate={{
+        backgroundColor: isScrolled 
+          ? isDark ? 'rgba(44, 31, 24, 0.95)' : 'rgba(255, 251, 235, 0.95)'
+          : 'transparent',
+        backdropFilter: isScrolled ? 'blur(10px)' : 'none',
+      }}
+      transition={{ duration: 0.3 }}
+      className={`fixed top-0 left-0 w-full z-50 ${isScrolled ? 'shadow-lg' : ''}`}
+    >
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between space-x-8 py-4">
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className={`text-2xl font-bold transition-colors ${
+              isScrolled
+                ? isDark
+                  ? 'text-luxury-cream-light hover:text-luxury-gold-light'
+                  : 'text-luxury-brown hover:text-luxury-gold'
+                : 'text-luxury-cream-light hover:text-luxury-gold-light'
+            }`}
+          >
+            Jaelen Hotel
+          </Link>
+
+          {/* Menu Items */}
+          <div className="flex-1 flex justify-center space-x-8">
+            {menuItems.map((item) => (
+              <motion.button
+                key={item.name}
+                onClick={() => navigate(item.href)}
+                className={`
+                  relative px-4 py-2 text-lg font-light
+                  transition-colors duration-300
+                  ${isScrolled
+                    ? isDark
+                      ? 'text-luxury-cream-light hover:text-luxury-gold-light'
+                      : 'text-luxury-brown hover:text-luxury-gold'
+                    : 'text-luxury-cream-light hover:text-luxury-gold-light'
+                  }
+                  ${location.pathname === item.href ? 'text-luxury-gold-light' : ''}
+                `}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                {item.name}
+                <span className="absolute bottom-0 left-0 w-full h-0.5
+                  transform scale-x-0 group-hover:scale-x-100
+                  transition-transform duration-300
+                  bg-luxury-gold-light" />
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Controls Group */}
+          <div className="flex items-center space-x-4">
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className={`
+                  p-2 rounded-full
+                  transition-colors duration-300
+                  ${isScrolled
+                    ? isDark
+                      ? 'bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20'
+                      : 'bg-luxury-brown/10 hover:bg-luxury-brown/20'
+                    : 'bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20'
+                  }
+                `}
+              >
+                <Globe className={`w-6 h-6 ${
+                  isScrolled
+                    ? isDark
+                      ? 'text-luxury-cream-light'
+                      : 'text-luxury-brown'
+                    : 'text-luxury-cream-light'
+                }`} />
+              </button>
+              
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg 
+                  bg-white dark:bg-luxury-brown 
+                  ring-1 ring-luxury-gold/10 dark:ring-luxury-gold-dark/10">
+                  <div className="py-1">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setLangMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm
+                          text-luxury-brown dark:text-luxury-cream
+                          hover:bg-luxury-cream dark:hover:bg-luxury-brown-light
+                          transition-colors"
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleDark}
+              className={`
+                p-2 rounded-full
+                transition-colors duration-300
+                ${isScrolled
+                  ? isDark
+                    ? 'bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20'
+                    : 'bg-luxury-brown/10 hover:bg-luxury-brown/20'
+                  : 'bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20'
+                }
+              `}
+            >
+              {isDark ? (
+                <Sun className={`w-6 h-6 ${
+                  isScrolled
+                    ? isDark
+                      ? 'text-luxury-cream-light'
+                      : 'text-luxury-brown'
+                    : 'text-luxury-cream-light'
+                }`} />
+              ) : (
+                <Moon className={`w-6 h-6 ${
+                  isScrolled
+                    ? isDark
+                      ? 'text-luxury-cream-light'
+                      : 'text-luxury-brown'
+                    : 'text-luxury-cream-light'
+                }`} />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </motion.nav>
+  );
+};
+
+export default AnimatedNavbar;
+
+================================================================================
+File: components\ui\Header.jsx
+================================================================================
+
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const Header = () => {
+  return (
+    <motion.header
+      className="fixed top-0 left-0 w-full z-50 text-white text-center py-6"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h1 className="text-4xl font-bold">Jaelen Hotel</h1>
+    </motion.header>
+  );
+};
+
+export default Header;
+
+================================================================================
+File: components\ui\HeroSection.jsx
+================================================================================
+
+// HeroSection.jsx
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Calendar } from 'lucide-react';
+import { AnimatedNavbar } from './AnimatedNavbar';
+
+const HeroSection = ({ 
+  isDark, 
+  toggleDark, 
+  setLanguage,
+  backgroundImage,
+  pageTitle,
+  pageDescription
+}) => {
+  return (
+    <div className="relative h-[70vh] w-full overflow-hidden">
+      {/* Background Image */}
+      <img
+        src={backgroundImage}
+        alt={pageTitle}
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      />
+
+      {/* Overlay with enhanced gradients */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-luxury-brown-dark/50" />
+      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/50" />
+      
+      {/* Navigation Menu */}
+      <AnimatedNavbar 
+        isDark={isDark} 
+        toggleDark={toggleDark} 
+        setLanguage={setLanguage} 
+      />
+
+      {/* Page Content */}
+      <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="max-w-4xl"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-luxury-cream-light">
+            {pageTitle}
+          </h1>
+          <p className="text-xl md:text-2xl text-luxury-cream">
+            {pageDescription}
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Booking Button */}
+      <div className="absolute top-24 right-8 z-20">
+        <div className="group relative">
+          <button className="
+            bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20
+            backdrop-blur-sm
+            text-luxury-cream-light hover:text-luxury-gold-light
+            p-6 rounded-full shadow-lg
+            transition-all duration-300
+            group-hover:scale-105
+          ">
+            <Calendar className="w-8 h-8" />
+          </button>
+          <div className="absolute right-0 mt-4 w-80 opacity-0 scale-95 transform 
+            transition-all duration-300 invisible 
+            group-hover:visible group-hover:opacity-100 group-hover:scale-100">
+            <div className="bg-white dark:bg-luxury-brown rounded-lg shadow-xl p-6">
+              <h3 className="text-xl text-luxury-brown dark:text-luxury-cream-light font-medium mb-4">
+                Make a Reservation
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Check-in Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Check-out Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <button className="w-full py-3 px-4 rounded-lg
+                  bg-luxury-gold hover:bg-luxury-gold-dark
+                  text-white text-lg font-light
+                  transition-colors">
+                  Book Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HeroSection;
+
+================================================================================
+File: components\ui\ImageGallery.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+
+const ImageGallery = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const slides = [
+    {
+      image: '/api/placeholder/1920/1080',
+      title: 'Luxury Suite',
+      description: 'Experience ultimate comfort in our premium suites'
+    },
+    {
+      image: '/api/placeholder/1920/1080',
+      title: 'Infinity Pool',
+      description: 'Relax in our stunning infinity pool with ocean views'
+    },
+    {
+      image: '/api/placeholder/1920/1080',
+      title: 'Gourmet Restaurant',
+      description: 'Savor exquisite cuisine in an elegant setting'
+    },
+    {
+      image: '/api/placeholder/1920/1080',
+      title: 'Spa Retreat',
+      description: 'Unwind in our world-class spa facilities'
+    },
+    {
+      image: '/api/placeholder/1920/1080',
+      title: 'Event Space',
+      description: 'Perfect venues for your special occasions'
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative h-screen overflow-hidden">
+      {slides.map((slide, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            index === currentSlide ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <img
+            src={slide.image}
+            alt={slide.title}
+            className="object-cover w-full h-full"
+          />
+          <div className="absolute inset-0 bg-black/30">
+            <div className="absolute bottom-20 left-20 text-white">
+              <h2 className="text-4xl font-bold mb-2">{slide.title}</h2>
+              <p className="text-xl">{slide.description}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+      
+      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-3 h-3 rounded-full transition-colors duration-200 ${
+              index === currentSlide ? 'bg-white' : 'bg-white/50'
+            }`}
+          />
+        ))}
+      </div>
+
+      <button
+        onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+      >
+        <ChevronLeft className="w-6 h-6 text-white" />
+      </button>
+
+      <button
+        onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+      >
+        <ChevronRight className="w-6 h-6 text-white" />
+      </button>
+    </div>
+  );
+};
+
+export default ImageGallery;
+
+================================================================================
+File: components\ui\MainHero.jsx
+================================================================================
+
+import React, { useRef, useEffect } from 'react';
+import { Calendar } from 'lucide-react';
+import { AnimatedNavbar } from './AnimatedNavbar';
+import { motion } from 'framer-motion';
+
+const MainHero = ({ isDark, toggleDark, setLanguage, videoSrc }) => {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [videoSrc]);
+
+  return (
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Video Background */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      >
+        <source src={videoSrc} type="video/mp4" />
+      </video>
+
+      {/* Overlay with enhanced gradients */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-luxury-brown-dark/50" />
+      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/50" />
+      
+      {/* Navigation Menu */}
+      <AnimatedNavbar 
+        isDark={isDark} 
+        toggleDark={toggleDark} 
+        setLanguage={setLanguage}
+      />
+
+      {/* Hero Content */}
+      <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="max-w-4xl"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-luxury-cream-light">
+            Welcome to Jaelen Hotel
+          </h1>
+          <p className="text-xl md:text-2xl text-luxury-cream">
+            Experience luxury redefined in the heart of sophistication
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Booking Button */}
+      <div className="absolute top-24 right-8 z-20">
+        <div className="group relative">
+          <button className="
+            bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20
+            backdrop-blur-sm
+            text-luxury-cream-light hover:text-luxury-gold-light
+            p-6 rounded-full shadow-lg
+            transition-all duration-300
+            group-hover:scale-105
+          ">
+            <Calendar className="w-8 h-8" />
+          </button>
+          <div className="absolute right-0 mt-4 w-80 opacity-0 scale-95 transform 
+            transition-all duration-300 invisible 
+            group-hover:visible group-hover:opacity-100 group-hover:scale-100">
+            <div className="bg-white dark:bg-luxury-brown rounded-lg shadow-xl p-6">
+              <h3 className="text-xl text-luxury-brown dark:text-luxury-cream-light font-medium mb-4">
+                Make a Reservation
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium 
+                    text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Check-in Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium 
+                    text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Check-out Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <button className="w-full py-3 px-4 rounded-lg
+                  bg-luxury-gold hover:bg-luxury-gold-dark
+                  text-white text-lg font-light
+                  transition-colors">
+                  Book Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MainHero;
+
+================================================================================
+File: components\ui\Navbar.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Calendar, Sun, Moon, Globe } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+const Navbar = ({ isDark, toggleDark, setLanguage }) => {
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' }
+  ];
+
+  const menuItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Our Places', href: '/places' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Additional Services', href: '/services' },
+    { name: 'Contact Us', href: '/contact' }
+  ];
+
+  return (
+    <>
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 w-full z-50 bg-black/20 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
+              Jaelen Hotel
+            </Link>
+
+            {/* Navigation Menu */}
+            <div className="flex-1 flex justify-center space-x-8">
+              {menuItems.map((item) => (
+                <motion.button
+                  key={item.name}
+                  onClick={() => navigate(item.href)}
+                  className={`text-white text-lg font-medium hover:text-blue-400 transition-colors relative group ${
+                    location.pathname === item.href ? 'text-blue-400' : ''
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  {item.name}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                </motion.button>
+              ))}
+            </div>
+
+            {/* Controls Group */}
+            <div className="flex items-center space-x-4">
+              {/* Language Selector */}
+              <div className="relative">
+                <button
+                  onClick={() => setLangMenuOpen(!langMenuOpen)}
+                  className="p-2 rounded-full hover:bg-white/10 text-white transition-colors"
+                >
+                  <Globe className="w-6 h-6" />
+                </button>
+                
+                {langMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                    <div className="py-1">
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => {
+                            setLanguage(lang.code);
+                            setLangMenuOpen(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          {lang.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleDark}
+                className="p-2 rounded-full hover:bg-white/10 text-white transition-colors"
+              >
+                {isDark ? (
+                  <Sun className="w-6 h-6" />
+                ) : (
+                  <Moon className="w-6 h-6" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Booking Button */}
+      <div className="fixed top-24 right-8 z-50">
+        <div className="group relative">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-full shadow-lg transition-all duration-300 group-hover:scale-105">
+            <Calendar className="w-8 h-8" />
+          </button>
+          <div className="absolute right-0 mt-4 w-80 opacity-0 scale-95 transform transition-all duration-300 invisible group-hover:visible group-hover:opacity-100 group-hover:scale-100">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+              <h3 className="text-xl text-gray-800 dark:text-white font-medium mb-4">Make a Reservation</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Check-in Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Check-out Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                </div>
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg text-lg font-medium transition-colors">
+                  Book Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Navbar;
+
+================================================================================
+File: components\ui\Section.jsx
+================================================================================
+
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const Section = ({ id, title, description, image, isActive, isPrevious, isNext }) => {
+  return (
+    <motion.section
+      id={id}
+      className={`w-full min-h-screen snap-start flex items-center justify-center relative ${
+        isActive ? 'z-20' : 'z-10'
+      }`}
+      initial={{ opacity: 0 }}
+      animate={{
+        opacity: isActive ? 1 : 0.5,
+        scale: isActive ? 1 : 0.9,
+        y: isPrevious ? -100 : isNext ? 100 : 0
+      }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="absolute inset-0">
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50" />
+      </div>
+      
+      <div className="relative z-10 text-white text-center max-w-4xl mx-auto px-4">
+        <motion.h2
+          className="text-5xl font-bold mb-6"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: isActive ? 0 : 20, opacity: isActive ? 1 : 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          {title}
+        </motion.h2>
+        <motion.p
+          className="text-xl mb-8"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: isActive ? 0 : 20, opacity: isActive ? 1 : 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          {description}
+        </motion.p>
+      </div>
+    </motion.section>
+  );
+};
+
+export default Section;
+
+================================================================================
+File: components\ui\SectionPreview.jsx
+================================================================================
+
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+
+const SectionPreview = ({ section, index, totalSections, isDark }) => {
+  const navigate = useNavigate();
+  const sectionRef = useRef(null);
+  const isEven = index % 2 === 0;
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]);
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
+
+  return (
+    <motion.section
+      ref={sectionRef}
+      className={`
+        relative min-h-screen flex items-center
+        ${index === 0 ? 'mt-0' : '-mt-32 md:-mt-64'}
+        overflow-hidden
+      `}
+      style={{ opacity }}
+    >
+      {/* Imagen de fondo con efecto parallax */}
+      <motion.div
+        className="absolute inset-0 w-full h-full"
+        style={{ scale }}
+      >
+        <motion.div
+          className="relative w-full h-full overflow-hidden"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.8 }}
+        >
+          <img
+            src={section.image}
+            alt={section.title}
+            className="w-full h-full object-cover filter brightness-75"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-luxury-brown-dark/80 via-transparent to-luxury-brown-dark/80" />
+        </motion.div>
+      </motion.div>
+
+      {/* Contenido */}
+      <div className="relative w-full max-w-7xl mx-auto px-6 py-24">
+        <motion.div 
+          className={`flex flex-col ${isEven ? 'items-start' : 'items-end'} max-w-xl`}
+          style={{ y }}
+        >
+          {/* Título con efecto de revelación */}
+          <motion.div
+            initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mb-6"
+          >
+            <h2 className="text-5xl font-light text-luxury-cream-light mb-4">
+              {section.title}
+            </h2>
+            <div className={`h-px w-32 bg-luxury-gold dark:bg-luxury-gold-light ${isEven ? 'ml-0' : 'ml-auto'}`} />
+          </motion.div>
+
+          {/* Descripción con efecto de revelación */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-lg text-luxury-cream leading-relaxed mb-8"
+          >
+            {section.description}
+          </motion.p>
+
+          {/* Botón con efecto hover */}
+          <motion.button
+            onClick={() => navigate(section.href)}
+            className="group relative overflow-hidden px-8 py-4 bg-transparent"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="relative z-10 text-luxury-cream-light font-light">
+              Discover More
+            </span>
+            <motion.div
+              className="absolute inset-0 border border-luxury-gold/20 dark:border-luxury-gold-light/20 rounded-lg"
+              initial={false}
+              whileHover={{ scale: 1.1, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.div
+              className="absolute inset-0 bg-luxury-gold/10 dark:bg-luxury-gold-light/10 rounded-lg"
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.button>
+        </motion.div>
+      </div>
+
+      {/* Efecto de transición entre secciones */}
+      {index !== totalSections - 1 && (
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent to-luxury-brown-dark/90 dark:to-luxury-brown/90 pointer-events-none" />
+      )}
+    </motion.section>
+  );
+};
+
+export default SectionPreview;
+
+================================================================================
+File: components\ui\SideNavBar.jsx
+================================================================================
+
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const SideNavBar = ({ sections, activeSection }) => {
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <motion.nav
+      className="fixed right-8 top-1/2 transform -translate-y-1/2 z-50"
+      initial={{ x: 100 }}
+      animate={{ x: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div className="flex flex-col space-y-4">
+        {sections.map((section, index) => (
+          <button
+            key={section.id}
+            onClick={() => scrollToSection(section.id)}
+            className="group relative flex items-center"
+          >
+            <span
+              className={`w-3 h-3 rounded-full transition-colors duration-200 ${
+                activeSection === index
+                  ? 'bg-white'
+                  : 'bg-gray-500 group-hover:bg-white'
+              }`}
+            />
+            <span
+              className={`absolute left-6 whitespace-nowrap text-sm transition-opacity duration-200 ${
+                activeSection === index
+                  ? 'text-white opacity-100'
+                  : 'text-gray-500 opacity-0 group-hover:opacity-100'
+              }`}
+            >
+              {section.title}
+            </span>
+          </button>
+        ))}
+      </div>
+    </motion.nav>
+  );
+};
+
+export default SideNavBar;
+
+================================================================================
+File: components\ui\ThemeToggle.jsx
+================================================================================
+
+import React from 'react';
+import { Sun, Moon } from 'lucide-react';
+
+const ThemeToggle = ({ isDark, toggleDark }) => {
+  return (
+    <button
+      onClick={toggleDark}
+      className={`
+        p-2 rounded-full
+        ${isDark 
+          ? 'bg-luxury-cream/10 hover:bg-luxury-cream/20' 
+          : 'bg-luxury-gold/10 hover:bg-luxury-gold/20'
+        }
+        ${isDark
+          ? 'text-luxury-cream hover:text-luxury-gold-light'
+          : 'text-luxury-brown hover:text-luxury-gold'
+        }
+        transition-all duration-300
+      `}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {isDark ? (
+        <Sun className="w-6 h-6" />
+      ) : (
+        <Moon className="w-6 h-6" />
+      )}
+    </button>
+  );
+};
+
+export default ThemeToggle;
+
+================================================================================
+File: hooks\useTheme.js
+================================================================================
+
+import { useState, useEffect } from 'react';
+
+export const useTheme = () => {
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      return saved === 'dark';
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (!localStorage.getItem('theme')) {
+        setIsDark(mediaQuery.matches);
+      }
+    };
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
+
+  const toggleDark = () => setIsDark(!isDark);
+
+  return [isDark, toggleDark];
+};
+
+export default useTheme;
+
+================================================================================
+File: pages\Contact.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin } from 'lucide-react';
+import HeroSection from '../components/ui/HeroSection';
+
+const Contact = ({ isDark, toggleDark, setLanguage }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const contactInfo = [
+    {
+      icon: Phone,
+      title: 'Phone',
+      details: '+1 (555) 123-4567',
+      link: 'tel:+15551234567'
+    },
+    {
+      icon: Mail,
+      title: 'Email',
+      details: 'info@jaelenhotel.com',
+      link: 'mailto:info@jaelenhotel.com'
+    },
+    {
+      icon: MapPin,
+      title: 'Location',
+      details: '123 Luxury Avenue, City, Country',
+      link: 'https://maps.google.com'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+      <HeroSection 
+        isDark={isDark} 
+        toggleDark={toggleDark}
+        setLanguage={setLanguage}
+        backgroundImage="/api/placeholder/1920/1080"
+        pageTitle="Contact Us"
+        pageDescription="Let us assist you in creating unforgettable moments"
+      />
+
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-2"
+            >
+              <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-luxury-brown-light 
+                p-8 rounded-lg shadow-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full p-3 rounded-lg border border-luxury-cream-dark dark:border-luxury-brown
+                        bg-luxury-cream dark:bg-luxury-brown
+                        text-luxury-brown dark:text-luxury-cream
+                        focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent
+                        transition-colors"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full p-3 rounded-lg border border-luxury-cream-dark dark:border-luxury-brown
+                        bg-luxury-cream dark:bg-luxury-brown
+                        text-luxury-brown dark:text-luxury-cream
+                        focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent
+                        transition-colors"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    className="w-full p-3 rounded-lg border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent
+                      transition-colors"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Message
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full p-3 rounded-lg border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent
+                      transition-colors resize-none"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 px-6 rounded-lg
+                    bg-luxury-gold hover:bg-luxury-gold-dark
+                    text-white font-medium
+                    transition-colors duration-300
+                    focus:outline-none focus:ring-2 focus:ring-luxury-gold-light focus:ring-offset-2"
+                >
+                  Send Message
+                </button>
+              </form>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
+              {contactInfo.map((item, index) => (
+                <div key={index} className="flex items-start space-x-4 p-6 bg-white dark:bg-luxury-brown-light 
+                  rounded-lg shadow-lg transition-transform hover:scale-105 duration-300">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 flex items-center justify-center rounded-full 
+                      bg-luxury-gold/10 dark:bg-luxury-gold-dark/10">
+                      <item.icon className="w-6 h-6 text-luxury-gold dark:text-luxury-gold-light" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium text-luxury-brown dark:text-luxury-cream-light">
+                      {item.title}
+                    </h3>
+                    <a
+                      href={item.link}
+                      className="mt-1 text-luxury-brown-light dark:text-luxury-cream-dark
+                        hover:text-luxury-gold dark:hover:text-luxury-gold-light
+                        transition-colors"
+                    >
+                      {item.details}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Contact;
+
+================================================================================
+File: pages\Gallery.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
+import HeroSection from '../components/ui/HeroSection';
+
+const Gallery = ({ isDark, toggleDark, setLanguage }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const images = [
+    { id: 1, src: '/api/placeholder/800/600', category: 'Rooms', title: 'Luxury Suite' },
+    { id: 2, src: '/api/placeholder/800/600', category: 'Dining', title: 'Gourmet Restaurant' },
+    { id: 3, src: '/api/placeholder/800/600', category: 'Facilities', title: 'Infinity Pool' },
+    { id: 4, src: '/api/placeholder/800/600', category: 'Rooms', title: 'Executive Room' },
+    { id: 5, src: '/api/placeholder/800/600', category: 'Dining', title: 'Elegant Bar' },
+    { id: 6, src: '/api/placeholder/800/600', category: 'Facilities', title: 'Spa Retreat' },
+    { id: 7, src: '/api/placeholder/800/600', category: 'Rooms', title: 'Presidential Suite' },
+    { id: 8, src: '/api/placeholder/800/600', category: 'Facilities', title: 'Fitness Center' }
+  ];
+
+  const [filter, setFilter] = useState('All');
+  const categories = ['All', ...new Set(images.map(img => img.category))];
+
+  const filteredImages = filter === 'All' 
+    ? images 
+    : images.filter(img => img.category === filter);
+
+  return (
+    <div className="min-h-screen bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+      <HeroSection 
+        isDark={isDark} 
+        toggleDark={toggleDark}
+        setLanguage={setLanguage}
+        backgroundImage="/api/placeholder/1920/1080"
+        pageTitle="Our Gallery"
+        pageDescription="A visual journey through elegance and sophistication"
+      />
+
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mt-8 flex justify-center space-x-4 flex-wrap gap-y-4">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setFilter(category)}
+                className={`px-6 py-2 rounded-full transition-all duration-300 ${
+                  filter === category
+                    ? 'bg-luxury-gold text-white'
+                    : 'bg-luxury-cream-dark dark:bg-luxury-brown-light text-luxury-brown dark:text-luxury-cream hover:bg-luxury-gold/20'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredImages.map((image, index) => (
+              <motion.div
+                key={image.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="relative group cursor-pointer"
+                onClick={() => setSelectedImage(image)}
+              >
+                <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg">
+                  <img
+                    src={image.src}
+                    alt={image.title}
+                    className="object-cover w-full h-full transform transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-luxury-brown-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 flex items-end justify-start p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div>
+                      <p className="text-luxury-cream-light text-lg font-medium">
+                        {image.title}
+                      </p>
+                      <p className="text-luxury-cream-dark text-sm">
+                        {image.category}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Modal para imagen ampliada */}
+      {selectedImage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-brown-dark/90"
+        >
+          <div className="relative max-w-4xl mx-auto px-4">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 text-luxury-cream-light hover:text-luxury-gold-light transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              src={selectedImage.src}
+              alt={selectedImage.title}
+              className="max-h-[80vh] w-auto rounded-lg shadow-2xl"
+            />
+            <div className="text-center mt-4">
+              <h3 className="text-luxury-cream-light text-xl font-medium">
+                {selectedImage.title}
+              </h3>
+              <p className="text-luxury-cream-dark">
+                {selectedImage.category}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export default Gallery;
+
+================================================================================
+File: pages\MainPage.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import VideoSectionManager from '../components/VideoSectionManager';
+// Importación dinámica del video usando URL
+import mainVideo from '../assets/videos/main-video.mp4';
+import captivatingMomentsVideo from '../assets/videos/captivating-moments.mp4';
+import luxuriousAccommodationsVideo from '../assets/videos/luxurious-accommodations.mp4';
+import personalizedAttentionVideo from '../assets/videos/personalized-attention.mp4';
+import premiumServicesVideo from '../assets/videos/premium-services.mp4';
+
+
+const MainPage = ({ isDark, toggleDark, setLanguage }) => {
+  const [currentSection, setCurrentSection] = useState(0);
+
+  const sections = [
+    {
+      title: "Welcome to Jaelen Hotel",
+      description: "Experience luxury redefined in the heart of sophistication",
+      video: mainVideo,
+      href: "/",
+      toggleDark,
+      setLanguage
+    },
+    {
+      title: "Luxurious Accommodations",
+      description: "Discover our collection of meticulously designed rooms and suites, where every detail has been carefully curated to provide an unparalleled experience of comfort and elegance. Each space is a perfect blend of modern luxury and timeless sophistication.",
+      video: luxuriousAccommodationsVideo,
+      href: "/places"
+    },
+    {
+      title: "Premium Services",
+      description: "Indulge in our world-class amenities, from rejuvenating spa treatments to exquisite dining experiences. Our dedicated staff ensures every moment of your stay exceeds expectations, offering personalized service that anticipates your every need.",
+      video: premiumServicesVideo,
+      href: "/services"
+    },
+    {
+      title: "Captivating Moments",
+      description: "Step into a world of visual elegance through our carefully curated gallery. Experience the beauty of our spaces, the warmth of our hospitality, and the attention to detail that makes every stay memorable. Let our images inspire your next luxury getaway.",
+      video: captivatingMomentsVideo,
+      href: "/gallery"
+    },
+    {
+      title: "Personalized Attention",
+      description: "Our concierge team is available 24/7 to ensure your stay is nothing short of exceptional. From arranging private transportation to securing exclusive reservations, we're here to transform your wishes into unforgettable experiences.",
+      video: personalizedAttentionVideo,
+      href: "/contact"
+    }
+  ];
+
+  return (
+    <div className="w-full bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+      <div className="h-screen snap-y snap-mandatory overflow-y-auto scroll-hide">
+        <VideoSectionManager
+          sections={sections}
+          currentSection={currentSection}
+          onSectionChange={setCurrentSection}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default MainPage;
+
+================================================================================
+File: pages\Places.jsx
+================================================================================
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import HeroSection from '../components/ui/HeroSection';
+import placesHeroImg from '../assets/images/sections/places/places-hero.jpg';
+// Importamos las imágenes locales
+import socorroImg from '../assets/images/sections/places/socorro/places-socorro.jpg';
+import zaragocillaImg from '../assets/images/sections/places/zaragocilla/places-zaragocilla.jpg';
+
+const Places = ({ isDark, toggleDark, setLanguage }) => {
+  const navigate = useNavigate();
+  
+  const locations = [
+    {
+      title: 'Proyecto El Socorro',
+      description: 'Experimenta el lujo y la comodidad en nuestra exclusiva ubicación en El Socorro. Disfruta de vistas espectaculares y amenidades premium diseñadas para una estancia inolvidable.',
+      image: socorroImg,
+      href: '/places/socorro',
+      status: 'active'
+    },
+    {
+      title: 'Proyecto Zaragocilla',
+      description: 'Próximamente, una nueva definición de hospitalidad de lujo en Zaragocilla. Regístrate para ser el primero en conocer nuestras ofertas exclusivas de prelanzamiento.',
+      image: zaragocillaImg,
+      href: '#',
+      status: 'coming-soon'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+      <HeroSection 
+        isDark={isDark} 
+        toggleDark={toggleDark}
+        setLanguage={setLanguage}
+        backgroundImage={placesHeroImg}
+        pageTitle="Nuestras Ubicaciones"
+        pageDescription="Descubre nuestras exclusivas propiedades diseñadas para experiencias excepcionales"
+      />
+      
+      <div className="container mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {locations.map((location, index) => (
+            <motion.div
+              key={location.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              onClick={() => location.status === 'active' && navigate(location.href)}
+              className={`
+                group relative rounded-xl overflow-hidden shadow-lg 
+                transform transition-all duration-500 
+                ${location.status === 'active' ? 'cursor-pointer hover:-translate-y-2' : 'cursor-default'}
+                hover:shadow-2xl
+              `}
+            >
+              {/* Imagen Principal */}
+              <div className="relative h-[400px] w-full overflow-hidden">
+                <img
+                  src={location.image}
+                  alt={location.title}
+                  className="h-full w-full object-cover object-center 
+                    transition-transform duration-700 group-hover:scale-110"
+                />
+                {/* Overlay con gradiente */}
+                <div className="absolute inset-0 bg-gradient-to-t 
+                  from-luxury-brown-dark/80 via-luxury-brown-dark/20 to-transparent" 
+                />
+                
+                {/* Contenido sobre la imagen */}
+                <div className="absolute inset-0 flex flex-col justify-end p-8">
+                  <div className="transform transition-transform duration-500 group-hover:translate-y-0">
+                    <div className="flex items-center space-x-3">
+                      <h3 className="text-3xl font-light text-luxury-cream-light">
+                        {location.title}
+                      </h3>
+                      {location.status === 'coming-soon' && (
+                        <Lock className="w-6 h-6 text-luxury-gold-light" />
+                      )}
+                    </div>
+                    <p className="mt-3 text-luxury-cream max-w-lg">
+                      {location.description}
+                    </p>
+                    
+                    {/* Botón personalizado */}
+                    <div className="mt-6">
+                      <button
+                        className={`
+                          px-6 py-3 rounded-lg
+                          backdrop-blur-sm
+                          border border-luxury-cream/20
+                          ${location.status === 'active'
+                            ? 'bg-luxury-cream/10 hover:bg-luxury-cream/20 text-luxury-cream hover:text-luxury-gold-light'
+                            : 'bg-luxury-gold/10 text-luxury-gold-light cursor-not-allowed'}
+                          transition-all duration-300
+                          group-hover:border-luxury-gold-light
+                        `}
+                      >
+                        {location.status === 'active' ? 'Explorar Propiedad' : 'Próximamente'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Places;
+
+================================================================================
+File: pages\Services.jsx
+================================================================================
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { 
+  Heart,
+  ChefHat,
+  Users,
+  Dumbbell,
+  Wifi,
+  Car,
+  Coffee,
+  ShieldCheck
+} from 'lucide-react';
+import HeroSection from '../components/ui/HeroSection';
+import servicesHeroImg from '../assets/images/sections/services/services-hero.jpg';
+
+const Services = ({ isDark, toggleDark, setLanguage }) => {
+  const services = [
+    {
+      title: 'Spa & Wellness',
+      description: 'Immerse yourself in tranquility with our premium spa services. Expert therapists provide personalized treatments using luxury products.',
+      icon: Heart
+    },
+    {
+      title: 'Fine Dining',
+      description: 'Savor exceptional cuisine prepared by world-class chefs in our elegant restaurants, featuring both local and international specialties.',
+      icon: ChefHat
+    },
+    {
+      title: 'Event Spaces',
+      description: 'Host memorable occasions in our sophisticated venues, perfect for both intimate gatherings and grand celebrations.',
+      icon: Users
+    },
+    {
+      title: 'Fitness Center',
+      description: 'Maintain your wellness routine in our state-of-the-art fitness center, equipped with premium exercise machines and personal trainers.',
+      icon: Dumbbell
+    },
+    {
+      title: 'High-Speed WiFi',
+      description: 'Stay connected with complimentary high-speed internet access throughout the hotel, perfect for both business and leisure.',
+      icon: Wifi
+    },
+    {
+      title: 'Valet Parking',
+      description: 'Experience hassle-free arrival and departure with our professional valet service and secure parking facilities.',
+      icon: Car
+    },
+    {
+      title: 'Room Service',
+      description: 'Enjoy gourmet dining in the privacy of your room with our 24-hour room service, featuring an extensive menu of culinary delights.',
+      icon: Coffee
+    },
+    {
+      title: '24/7 Security',
+      description: 'Rest assured with our round-the-clock security service, ensuring your safety and peace of mind throughout your stay.',
+      icon: ShieldCheck
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+      <HeroSection 
+        isDark={isDark} 
+        toggleDark={toggleDark}
+        setLanguage={setLanguage}
+        backgroundImage={servicesHeroImg}
+        pageTitle="Premium Services"
+        pageDescription="Experience unparalleled luxury and comfort"
+      />
+
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group relative p-8 bg-white dark:bg-luxury-brown-light rounded-lg shadow-lg 
+                  hover:shadow-xl transition-all duration-300 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-luxury-gold-light/5 dark:bg-luxury-gold-dark/5 
+                  scale-0 group-hover:scale-100 transition-transform duration-300" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center w-12 h-12 mb-6 rounded-full 
+                    bg-luxury-gold/10 dark:bg-luxury-gold-dark/10">
+                    <service.icon className="w-6 h-6 text-luxury-gold dark:text-luxury-gold-light" />
+                  </div>
+                  
+                  <h3 className="text-xl font-medium mb-3 text-luxury-brown dark:text-luxury-cream-light
+                    group-hover:text-luxury-gold dark:group-hover:text-luxury-gold-light transition-colors">
+                    {service.title}
+                  </h3>
+                  
+                  <p className="text-luxury-brown-light dark:text-luxury-cream-dark leading-relaxed">
+                    {service.description}
+                  </p>
+                </div>
+
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r 
+                  from-luxury-gold/0 via-luxury-gold to-luxury-gold/0 
+                  dark:from-luxury-gold-dark/0 dark:via-luxury-gold-dark dark:to-luxury-gold-dark/0
+                  opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Services;
+
+================================================================================
+File: pages\SocorroProject.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import HeroSection from '../components/ui/HeroSection';
+
+// Importar las imágenes
+import roomMain from '../assets/images/sections/places/socorro/room-main.jpg';
+import roomBedroom from '../assets/images/sections/places/socorro/room-bedroom.jpg';
+import roomBathroom from '../assets/images/sections/places/socorro/room-bathroom.jpg';
+import roomLiving from '../assets/images/sections/places/socorro/room-living.jpg';
+import roomView from '../assets/images/sections/places/socorro/room-view.jpg';
+import placesHeroImg from '../assets/images/sections/places/places-hero.jpg';
+
+const SocorroProject = ({ isDark, toggleDark, setLanguage }) => {
+  const [currentImage, setCurrentImage] = useState(0);
+  const [showGallery, setShowGallery] = useState(false);
+
+  // Array de imágenes con metadata
+  const images = [
+    {
+      src: roomMain,
+      alt: 'Vista principal de la habitación',
+      title: 'Suite Ejecutiva'
+    },
+    {
+      src: roomBedroom,
+      alt: 'Área de dormitorio',
+      title: 'Dormitorio Principal'
+    },
+    {
+      src: roomBathroom,
+      alt: 'Baño de lujo',
+      title: 'Baño Completo'
+    },
+    {
+      src: roomLiving,
+      alt: 'Área de estar',
+      title: 'Sala de Estar'
+    },
+    {
+      src: roomView,
+      alt: 'Vista desde la habitación',
+      title: 'Vista Panorámica'
+    }
+  ];
+
+  const amenities = [
+    'Cama King Size',
+    'Baño privado con ducha de lluvia',
+    'Smart TV 55"',
+    'Aire acondicionado',
+    'WiFi de alta velocidad',
+    'Minibar premium',
+    'Caja fuerte digital',
+    'Servicio a la habitación 24/7'
+  ];
+
+  return (
+    <div className="min-h-screen bg-luxury-cream dark:bg-luxury-brown transition-colors duration-300">
+      <HeroSection 
+        isDark={isDark} 
+        toggleDark={toggleDark}
+        setLanguage={setLanguage}
+        backgroundImage={placesHeroImg}
+        pageTitle="Proyecto El Socorro"
+        pageDescription="Una experiencia de hospedaje única en el corazón de la ciudad"
+      />
+
+      {/* Sección Principal */}
+      <div className="container mx-auto px-6 py-16">
+{/* Galería de Vista Previa */}
+<div className="relative group">
+  <div className="grid grid-cols-4 gap-4 h-[500px]">
+    {/* Imagen Principal */}
+    <div 
+      className="col-span-2 row-span-2 relative overflow-hidden rounded-lg group/item cursor-pointer"
+      onClick={() => setShowGallery(true)}
+    >
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        className="h-full"
+      >
+        <img
+          src={images[0].src}
+          alt={images[0].alt}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-luxury-brown-dark/80 to-transparent opacity-0 group-hover/item:opacity-100 transition-all duration-500">
+          <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover/item:translate-y-0 transition-transform duration-500">
+            <h3 className="text-2xl font-light text-luxury-cream-light mb-2">
+              {images[0].title}
+            </h3>
+            <p className="text-luxury-cream text-sm">
+              Click para ver la galería completa
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+
+    {/* Imágenes Secundarias */}
+    {images.slice(1, 5).map((img, index) => (
+      <div
+        key={index}
+        className="relative overflow-hidden rounded-lg group/item cursor-pointer"
+        onClick={() => {
+          setCurrentImage(index + 1);
+          setShowGallery(true);
+        }}
+      >
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="h-full"
+        >
+          <img
+            src={img.src}
+            alt={img.alt}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-luxury-brown-dark/80 to-transparent opacity-0 group-hover/item:opacity-100 transition-all duration-500">
+            <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover/item:translate-y-0 transition-transform duration-500">
+              <h4 className="text-luxury-cream-light text-lg font-light">{img.title}</h4>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    ))}
+  </div>
+
+  {/* Botón Ver Todas */}
+  <motion.button 
+    className="absolute bottom-4 right-4 px-6 py-3 rounded-lg
+      bg-luxury-cream/10 backdrop-blur-sm
+      border border-luxury-cream/20
+      text-luxury-cream
+      transition-all duration-300
+      hover:bg-luxury-cream/20 hover:border-luxury-gold-light
+      hover:text-luxury-gold-light"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => setShowGallery(true)}
+  >
+    <span className="relative inline-flex items-center">
+      Ver todas las fotos
+      <motion.span
+        className="ml-2"
+        initial={{ x: 0 }}
+        whileHover={{ x: 5 }}
+      >
+        →
+      </motion.span>
+    </span>
+  </motion.button>
+</div>
+
+{/* Modal de Galería */}
+<AnimatePresence>
+  {showGallery && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center"
+    >
+      {/* Fondo oscuro */}
+      <div className="absolute inset-0 bg-black/95" onClick={() => setShowGallery(false)} />
+
+      {/* Contenido */}
+      <div className="relative z-10 w-full">
+        {/* Botón Cerrar */}
+        <motion.button
+          onClick={() => setShowGallery(false)}
+          className="absolute top-4 right-4 text-white hover:text-luxury-gold-light transition-colors p-2 z-20"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <X className="w-8 h-8" />
+        </motion.button>
+
+        {/* Navegación */}
+        <motion.button
+          onClick={() => setCurrentImage((prev) => (prev - 1 + images.length) % images.length)}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 
+            text-white hover:text-luxury-gold-light transition-colors p-2 z-20"
+          whileHover={{ scale: 1.2, x: -5 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <ChevronLeft className="w-8 h-8" />
+        </motion.button>
+
+        <motion.button
+          onClick={() => setCurrentImage((prev) => (prev + 1) % images.length)}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 
+            text-white hover:text-luxury-gold-light transition-colors p-2 z-20"
+          whileHover={{ scale: 1.2, x: 5 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <ChevronRight className="w-8 h-8" />
+        </motion.button>
+
+        {/* Imagen Principal */}
+        <motion.div
+          key={currentImage}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="relative max-w-5xl mx-auto px-4"
+        >
+          <img
+            src={images[currentImage].src}
+            alt={images[currentImage].alt}
+            className="max-h-[80vh] w-auto mx-auto rounded-lg shadow-2xl"
+          />
+          
+          {/* Información */}
+          <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 text-center">
+            <div className="bg-black/50 text-white px-6 py-3 rounded-full backdrop-blur-sm">
+              <h3 className="text-xl font-light mb-2">{images[currentImage].title}</h3>
+              <p className="text-sm text-luxury-cream-dark">
+                {currentImage + 1} / {images.length}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Miniaturas */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 
+          flex space-x-3 overflow-x-auto max-w-3xl px-4">
+          {images.map((img, index) => (
+            <motion.button
+              key={index}
+              onClick={() => setCurrentImage(index)}
+              className={`
+                relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0
+                transition-all duration-300
+                ${currentImage === index ? 'ring-2 ring-luxury-gold-light scale-110' : 'opacity-50 hover:opacity-100'}
+              `}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-full object-cover"
+              />
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+        {/* Información y Reserva */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-16">
+          {/* Información Principal */}
+          <div className="lg:col-span-2 space-y-8">
+            <div>
+              <h2 className="text-3xl font-light text-luxury-brown dark:text-luxury-cream-light">
+                Suite Ejecutiva
+              </h2>
+              <p className="mt-4 text-luxury-brown-light dark:text-luxury-cream-dark leading-relaxed">
+                Experimenta el lujo y la comodidad en nuestra Suite Ejecutiva. Un espacio 
+                cuidadosamente diseñado que combina elegancia moderna con comodidades premium, 
+                ofreciendo una experiencia de hospedaje excepcional para el viajero exigente.
+              </p>
+            </div>
+
+            {/* Amenidades */}
+            <div>
+              <h3 className="text-xl font-light text-luxury-brown dark:text-luxury-cream-light mb-4">
+                Amenidades
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                {amenities.map((amenity, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center space-x-2 text-luxury-brown-light dark:text-luxury-cream-dark"
+                  >
+                    <Check className="w-5 h-5 text-luxury-gold" />
+                    <span>{amenity}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Políticas */}
+            <div>
+              <h3 className="text-xl font-light text-luxury-brown dark:text-luxury-cream-light mb-4">
+                Información Importante
+              </h3>
+              <div className="space-y-2 text-luxury-brown-light dark:text-luxury-cream-dark">
+                <p>Check-in: 3:00 PM | Check-out: 12:00 PM</p>
+                <p>Política de cancelación: Gratuita hasta 24 horas antes</p>
+                <p>No se permiten mascotas</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Módulo de Reserva */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8 bg-white dark:bg-luxury-brown-light rounded-xl shadow-xl p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <span className="block text-2xl font-light text-luxury-brown dark:text-luxury-cream-light">
+                    $299 USD
+                  </span>
+                  <span className="text-luxury-brown-light dark:text-luxury-cream-dark">
+                    por noche
+                  </span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <span className="text-luxury-gold">★★★★★</span>
+                  <span className="text-luxury-brown-light dark:text-luxury-cream-dark">
+                    (48 reseñas)
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Fecha de llegada
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Fecha de salida
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-luxury-brown dark:text-luxury-cream-light mb-1">
+                    Huéspedes
+                  </label>
+                  <select
+                    className="w-full p-2 rounded-lg
+                      border border-luxury-cream-dark dark:border-luxury-brown
+                      bg-luxury-cream dark:bg-luxury-brown
+                      text-luxury-brown dark:text-luxury-cream
+                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
+                  >
+                    <option>1 huésped</option>
+                    <option>2 huéspedes</option>
+                    <option>3 huéspedes</option>
+                    <option>4 huéspedes</option>
+                  </select>
+                </div>
+                <button className="w-full py-3 px-4 rounded-lg
+                  bg-luxury-gold hover:bg-luxury-gold-dark
+                  text-white text-lg font-light
+                  transition-colors">
+                  Reservar ahora
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Galería Modal */}
+      <AnimatePresence>
+        {showGallery && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+          >
+            <button
+              onClick={() => setShowGallery(false)}
+              className="absolute top-4 right-4 text-white hover:text-luxury-gold-light transition-colors"
+            >
+              <X className="w-8 h-8" />
+            </button>
+
+            <button
+              onClick={() => setCurrentImage((prev) => (prev - 1 + images.length) % images.length)}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 
+                text-white hover:text-luxury-gold-light transition-colors"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+
+            <button
+              onClick={() => setCurrentImage((prev) => (prev + 1) % images.length)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 
+                text-white hover:text-luxury-gold-light transition-colors"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+
+            <motion.div
+              key={currentImage}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="relative max-w-5xl mx-auto px-4"
+            >
+              <img
+                src={images[currentImage].src}
+                alt={images[currentImage].alt}
+                className="max-h-[80vh] w-auto mx-auto rounded-lg shadow-2xl"
+              />
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
+                bg-black/50 text-white px-4 py-2 rounded-full backdrop-blur-sm">
+                {currentImage + 1} / {images.length}
+              </div>
+              <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-white text-lg">
+                {images[currentImage].title}
+              </div>
+            </motion.div>
+
+            {/* Thumbnails */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 
+              flex space-x-2 overflow-x-auto max-w-3xl px-4">
+              {images.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImage(index)}
+                  className={`
+                    w-16 h-16 rounded-lg overflow-hidden flex-shrink-0
+                    border-2 transition-all duration-300
+                    ${currentImage === index 
+                      ? 'border-luxury-gold-light scale-110' 
+                      : 'border-transparent opacity-50 hover:opacity-100'}
+                  `}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default SocorroProject;
+
+================================================================================
+File: styles\index.css
+================================================================================
+
+/* styles/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+  }
+
+  /* Estilos de scroll suave */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-luxury-gold/20 dark:bg-luxury-gold-light/20 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-luxury-gold/30 dark:bg-luxury-gold-light/30;
+  }
+}
+
+/* Components */
+@layer components {
+  .section-container {
+    @apply relative overflow-hidden;
+    transform-style: preserve-3d;
+  }
+
+  .luxury-button {
+    @apply relative overflow-hidden rounded-lg px-8 py-4
+      border border-luxury-gold/20 dark:border-luxury-gold-light/20
+      bg-transparent hover:bg-luxury-gold/5 dark:hover:bg-luxury-gold-dark/5
+      text-luxury-brown dark:text-luxury-gold-light
+      transition-colors duration-300;
+  }
+
+  .luxury-button::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-[2px]
+      bg-luxury-gold dark:bg-luxury-gold-light
+      transform origin-left scale-x-0 transition-transform duration-500;
+  }
+
+  .luxury-button:hover::after {
+    @apply scale-x-100;
+  }
+
+  .image-container {
+    @apply relative overflow-hidden rounded-2xl;
+    transform-style: preserve-3d;
+  }
+
+  .image-container::before {
+    content: '';
+    @apply absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-500;
+    z-index: 1;
+  }
+
+  .image-container:hover::before {
+    @apply opacity-100;
+  }
+}
+
+/* Utilities */
+@layer utilities {
+  .perspective {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* Animaciones */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(45deg);
+  }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Transiciones */
+.smooth-transition {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+.hover-lift {
+  @apply transition-transform duration-300 ease-out;
+}
+
+.hover-lift:hover {
+  @apply transform -translate-y-1;
+}
+
+/* Efectos de Fondo */
+.bg-gradient-overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.7)
+  );
+}
+
+.section-transition {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--bg-color)
+  );
+}
