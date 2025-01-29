@@ -14,6 +14,7 @@ const BookingForm = ({ onClose }) => {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm({
     defaultValues: {
       guestName: '',
@@ -21,6 +22,8 @@ const BookingForm = ({ onClose }) => {
       phoneNumber: '',
     },
   });
+  
+  const roomCount = watch('roomCount');
 
   useEffect(() => {
     if (checkIn && checkOut) {
@@ -38,7 +41,8 @@ const BookingForm = ({ onClose }) => {
       checkOut,
       numberOfDays,
       roomType: ROOM_TYPES.COLONIAL_SUITE.id,
-      totalPrice: numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price
+      totalPrice: numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price * data.roomCount,
+      pricePerNight: ROOM_TYPES.COLONIAL_SUITE.price,
     };
     console.log('Booking submitted:', bookingData);
     // Aquí iría la lógica para enviar los datos a un backend
@@ -152,8 +156,11 @@ const BookingForm = ({ onClose }) => {
           <div className="text-sm text-luxury-brown dark:text-luxury-cream-light">
             Duración de la estancia: {numberOfDays} {numberOfDays === 1 ? 'noche' : 'noches'}
           </div>
+          <div className="text-base text-luxury-brown dark:text-luxury-cream-light">
+            {`${register('roomCount').value} ${register('roomCount').value === 1 ? 'habitación' : 'habitaciones'} x ${ROOM_TYPES.COLONIAL_SUITE.price} USD por noche`}
+          </div>
           <div className="text-lg font-medium text-luxury-gold">
-            Total: ${numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price} USD
+            Total: ${numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price * register('roomCount').value} USD
           </div>
         </div>
       )}
