@@ -14,7 +14,7 @@ const BookingForm = ({ onClose }) => {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
+    watch
   } = useForm({
     defaultValues: {
       guestName: '',
@@ -22,7 +22,8 @@ const BookingForm = ({ onClose }) => {
       phoneNumber: '',
     },
   });
-  
+
+  // Observar el valor de roomCount
   const roomCount = watch('roomCount');
 
   useEffect(() => {
@@ -35,18 +36,26 @@ const BookingForm = ({ onClose }) => {
   }, [checkIn, checkOut, setValue]);
 
   const onSubmit = (data) => {
+    const totalPrice = numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price * parseInt(data.roomCount);
     const bookingData = {
       ...data,
       checkIn,
       checkOut,
       numberOfDays,
       roomType: ROOM_TYPES.COLONIAL_SUITE.id,
-      totalPrice: numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price * data.roomCount,
+      totalPrice,
       pricePerNight: ROOM_TYPES.COLONIAL_SUITE.price,
     };
     console.log('Booking submitted:', bookingData);
-    // Aquí iría la lógica para enviar los datos a un backend
     if (onClose) onClose();
+  };
+
+  // Calcular el precio total
+  const calculateTotal = () => {
+    if (numberOfDays && roomCount) {
+      return numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price * parseInt(roomCount);
+    }
+    return 0;
   };
 
   return (
@@ -157,10 +166,10 @@ const BookingForm = ({ onClose }) => {
             Duración de la estancia: {numberOfDays} {numberOfDays === 1 ? 'noche' : 'noches'}
           </div>
           <div className="text-base text-luxury-brown dark:text-luxury-cream-light">
-            {`${register('roomCount').value} ${register('roomCount').value === 1 ? 'habitación' : 'habitaciones'} x ${ROOM_TYPES.COLONIAL_SUITE.price} USD por noche`}
+            {roomCount} {parseInt(roomCount) === 1 ? 'habitación' : 'habitaciones'} x ${ROOM_TYPES.COLONIAL_SUITE.price} USD por noche
           </div>
           <div className="text-lg font-medium text-luxury-gold">
-            Total: ${numberOfDays * ROOM_TYPES.COLONIAL_SUITE.price * register('roomCount').value} USD
+            Total: ${calculateTotal()} USD
           </div>
         </div>
       )}
