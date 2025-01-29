@@ -33,8 +33,8 @@ const App = () => {
   };
 
   return (
-    <Router basename="/jaelen-hotel"> {/* Actualizado para GitHub Pages */}
-      <Layout 
+<Router basename="/uncjae-hotel"> {/* Actualizado para coincidir con tu repositorio */}
+  <Layout 
         isDark={isDark} 
         toggleDark={toggleDark}
         setLanguage={setLanguage}

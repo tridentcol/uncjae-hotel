@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/jaelen-hotel/', // Añadido para GitHub Pages
+  base: '/uncjae-hotel/', // Actualizado para coincidir con tu repositorio
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
