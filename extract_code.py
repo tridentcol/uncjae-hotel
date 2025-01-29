@@ -50,7 +50,12 @@ def extract_code(src_dir, output_file):
 │   │   │   ├── SideNavBar.jsx
 │   │   │   └── ThemeToggle.jsx
 │   │   └── VideoSectionManager.jsx
+│   ├── config/
+│   │   └── rooms.js
+│   ├── constants/
+│   │   └── booking.js       
 │   ├── context/
+│   │   └── BookingContext.jsx 
 │   ├── hooks/
 │   │   └── useTheme.js
 │   ├── pages/
