@@ -1,14 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { AnimatedNavbar } from '../components/ui/AnimatedNavbar';
-import { Calendar } from 'lucide-react';
+import { Calendar, X } from 'lucide-react';
 import Footer from '../components/layout/Footer';
+import BookingForm from '../components/booking/BookingForm';
 
 const VideoSectionManager = ({ sections, currentSection, onSectionChange }) => {
   const sectionRefs = useRef([]);
   const observerRef = useRef(null);
   const [activeVideo, setActiveVideo] = useState(0);
   const [showFooter, setShowFooter] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
   const videoRefs = useRef([]);
   const scrollingRef = useRef(false);
   const containerRef = useRef(null);
@@ -74,7 +76,6 @@ const VideoSectionManager = ({ sections, currentSection, onSectionChange }) => {
       }
     }
 
-    // Manejador de scroll
     const handleWheel = (event) => {
       event.preventDefault();
       
@@ -151,63 +152,50 @@ const VideoSectionManager = ({ sections, currentSection, onSectionChange }) => {
       {/* Booking Button (siempre visible) */}
       <div className="fixed top-24 right-8 z-50">
         <div className="group relative">
-          <button className="
-            bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20
-            backdrop-blur-sm
-            text-luxury-cream-light hover:text-luxury-gold-light
-            p-6 rounded-full shadow-lg
-            transition-all duration-300
-            group-hover:scale-105
-          ">
+          <button
+            onClick={() => setShowBookingForm(true)}
+            className="
+              bg-luxury-cream-light/10 hover:bg-luxury-cream-light/20
+              backdrop-blur-sm
+              text-luxury-cream-light hover:text-luxury-gold-light
+              p-6 rounded-full shadow-lg
+              transition-all duration-300
+              group-hover:scale-105
+            "
+          >
             <Calendar className="w-8 h-8" />
           </button>
-          <div className="absolute right-0 mt-4 w-80 opacity-0 scale-95 transform 
-            transition-all duration-300 invisible 
-            group-hover:visible group-hover:opacity-100 group-hover:scale-100">
-            <div className="bg-white dark:bg-luxury-brown rounded-lg shadow-xl p-6">
-              <h3 className="text-xl text-luxury-brown dark:text-luxury-cream-light font-medium mb-4">
-                Make a Reservation
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium 
-                    text-luxury-brown dark:text-luxury-cream-light mb-1">
-                    Check-in Date
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full p-2 rounded-lg
-                      border border-luxury-cream-dark dark:border-luxury-brown
-                      bg-luxury-cream dark:bg-luxury-brown
-                      text-luxury-brown dark:text-luxury-cream
-                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium 
-                    text-luxury-brown dark:text-luxury-cream-light mb-1">
-                    Check-out Date
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full p-2 rounded-lg
-                      border border-luxury-cream-dark dark:border-luxury-brown
-                      bg-luxury-cream dark:bg-luxury-brown
-                      text-luxury-brown dark:text-luxury-cream
-                      focus:ring-2 focus:ring-luxury-gold-light focus:border-transparent"
-                  />
-                </div>
-                <button className="w-full py-3 px-4 rounded-lg
-                  bg-luxury-gold hover:bg-luxury-gold-dark
-                  text-white text-lg font-light
-                  transition-colors">
-                  Book Now
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
+
+      {/* Modal de Reserva */}
+      {showBookingForm && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className="relative bg-white dark:bg-luxury-brown rounded-xl shadow-2xl p-8 max-w-md w-full m-4"
+          >
+            <button
+              onClick={() => setShowBookingForm(false)}
+              className="absolute top-4 right-4 text-luxury-brown-light dark:text-luxury-cream-dark
+                hover:text-luxury-gold dark:hover:text-luxury-gold-light transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <h3 className="text-2xl font-light text-luxury-brown dark:text-luxury-cream-light mb-6">
+              Reserve su Suite Getsemaní
+            </h3>
+            <BookingForm onClose={() => setShowBookingForm(false)} />
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Contenedor principal con scroll controlado */}
       <div 
