@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { AnimatedNavbar } from '../components/ui/AnimatedNavbar';
 import { Calendar, X } from 'lucide-react';
 import Footer from '../components/layout/Footer';
-import BookingForm from '../components/booking/BookingForm';
+import BookingForm from './booking/BookingForm';
 
 const VideoSectionManager = ({ sections, currentSection, onSectionChange }) => {
   const sectionRefs = useRef([]);
